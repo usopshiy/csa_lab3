@@ -15,6 +15,7 @@ class Opcode(str, Enum):
     LD = "ld"
     ST = "st"
     HLT = "hlt"
+    CMP = "cmp"
 
     def __str__(self):
         return str(self.value)

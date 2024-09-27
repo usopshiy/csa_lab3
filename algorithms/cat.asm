@@ -1,7 +1,8 @@
 section .text:
 in x0
 loop:
-    jz x0, exit
+    cmp x0, 0
+    jz exit
     out x0
     in x0
     jmp loop
