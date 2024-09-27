@@ -39,7 +39,7 @@ def get_instruction(line: str) -> Instruction:
     return Instruction(opcode, args)
 
 
-def translate_tokens(data: list[str]):
+def translate_tokens(data: list[str]) -> (dict[str, int], dict[int, str], dict[int, Instruction]):
     jmpdict: dict[str, int] = {}
     datadict: dict[int, str] = {}
     instrdict: dict[int, Instruction] = {}
@@ -48,16 +48,14 @@ def translate_tokens(data: list[str]):
     if ".data:" in data[0]:
         textcnt += 1
         datacnt: int = 2    # 0, 1 - IO ports
-        while True:
-            if data[textcnt] == "section .text:":
-                break
-
-            label, text = data[textcnt].split(":")
-            get_meaningful_text(text)
+        while data[textcnt] != "section .text:":
+            label, text = data[textcnt].split(": ")
+            text = get_meaningful_text(text)
             jmpdict[label] = datacnt
             for i in text:
                 datadict[datacnt] = i
                 datacnt += 1
+            textcnt += 1
 
     instrcnt: int = 0
     for i in data[textcnt:]:
@@ -71,7 +69,7 @@ def translate_tokens(data: list[str]):
     return jmpdict, datadict, instrdict
 
 
-def assert_navigation(jmpdict: dict[str, int], instrdict: dict[int, Instruction]):
+def assert_navigation(jmpdict: dict[str, int], instrdict: dict[int, Instruction]) -> None:
     for value in instrdict.values():
         if value.opcode == Opcode.HLT:
             break
@@ -79,7 +77,7 @@ def assert_navigation(jmpdict: dict[str, int], instrdict: dict[int, Instruction]
             value.args[-1] = str(jmpdict[value.args[-1]])
 
 
-def translate(input_file: str, data_output_file: str, instr_output_file: str):
+def translate(input_file: str, data_output_file: str, instr_output_file: str) -> None:
     tokens = pre_translate(input_file)
     jmpdict, datadict, instrdict = translate_tokens(tokens)
     assert_navigation(jmpdict, instrdict)
