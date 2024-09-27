@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import sys
 
@@ -9,7 +11,7 @@ def get_meaningful_token(line: str) -> str:
 
 
 def pre_translate(input_file: str) -> list[str]:
-    f = open(input_file, 'r')
+    f = open(input_file)
     lines = [get_meaningful_token(line) for line in f.readlines()]
     f.close()
     while "" in lines:
@@ -65,7 +67,7 @@ def translate_tokens(data: list[str]):
             instr: Instruction = get_instruction(i)
             instrdict[instrcnt] = instr
             instrcnt += 1
-    
+
     return jmpdict, datadict, instrdict
 
 
@@ -89,7 +91,7 @@ def translate(input_file: str, data_output_file: str, instr_output_file: str):
         json.dump(instrdict, out_file, indent=4, default=lambda o: o.__dict__)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = sys.argv[1:]
     assert len(args) == 3, "Usage: translator.py <input> <data_output> <instr_output>"
 

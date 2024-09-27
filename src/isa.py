@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
 class Opcode(str, Enum):
+    NOP = "nop"
     MV = "mv"
     INC = "inc"
     ADD = "add"
@@ -11,7 +14,7 @@ class Opcode(str, Enum):
     JL = "jl"
     LD = "ld"
     ST = "st"
-    HLT = "h*lt"
+    HLT = "hlt"
 
     def __str__(self):
         return str(self.value)
