@@ -32,11 +32,7 @@ class ControlSignal(str, Enum):
     LatchPC = "latch_pc"
 
 
-OPCODE_IMPL = {
-    Opcode.ADD: lambda a, b: a + b,
-    Opcode.SUB: lambda a, b: a - b,
-    Opcode.INC: lambda a, _: a + 1
-}
+OPCODE_IMPL = {Opcode.ADD: lambda a, b: a + b, Opcode.SUB: lambda a, b: a - b, Opcode.INC: lambda a, _: a + 1}
 
 
 # ALU processing part
@@ -91,7 +87,7 @@ class IO:
         return f"{self.charset} {self.output}"
 
 
-MEMORY_SIZE = 2 ** 10
+MEMORY_SIZE = 2**10
 
 
 class DataPath:
@@ -109,7 +105,7 @@ class DataPath:
         i: int = 2
         while i < len(data):
             if data[str(i)] == ord("\\"):
-                if data[str(i+1)] == ord("n"):
+                if data[str(i + 1)] == ord("n"):
                     self.data_mem[i] = ord("\n")
                 else:
                     self.data_mem[i] = ord("\0")
@@ -118,7 +114,7 @@ class DataPath:
                 self.data_mem[i] = int(data[str(i)])
                 i += 1
         for key, value in instr.items():
-            self.instr_mem[int(key)] = Instruction(Opcode(value['opcode']), list(value['args']))
+            self.instr_mem[int(key)] = Instruction(Opcode(value["opcode"]), list(value["args"]))
 
     def latch_reg(self, reg: int, value: int) -> None:
         self.regs[reg] = value
@@ -152,7 +148,6 @@ def is_reg(reg: str) -> bool:
 
 
 class ControlUint:
-
     @staticmethod
     def parse_instruction_args(instr: Instruction) -> dict[str, int]:
         regs: list[int] = []
@@ -162,11 +157,7 @@ class ControlUint:
                 regs.append(int(arg[1:]))
             else:
                 imm = int(arg)
-        return {
-            "tr": regs[0] if len(regs) > 0 else None,
-            "sr": regs[1] if len(regs) > 1 else None,
-            "imm": imm
-        }
+        return {"tr": regs[0] if len(regs) > 0 else None, "sr": regs[1] if len(regs) > 1 else None, "imm": imm}
 
     def __init__(self, dp: DataPath):
         self.data_path: DataPath = dp
@@ -225,26 +216,27 @@ class ControlUint:
         inst: Instruction = self.data_path.instr_mem[self.pc]
         opcode: Opcode = inst.opcode
         decoded: dict[str, int] = ControlUint.parse_instruction_args(inst)
+
         if self.decode_and_execute_control_flow_instruction(inst):
             return
 
-        elif opcode in [Opcode.ADD, Opcode.SUB, opcode.INC, opcode.CMP]:
-            self.tick()     # select for right alu input
+        if opcode in [Opcode.ADD, Opcode.SUB, opcode.INC, opcode.CMP]:
+            self.tick()  # select for right alu input
             if decoded["imm"] is not None:
                 digit: int = decoded["imm"]
             elif decoded["sr"] is not None:
                 digit: int = self.data_path.load_reg(decoded["sr"])
             else:
                 digit: int = None
-            self.data_path.latch_reg(decoded["tr"], self.data_path.alu.process(opcode,
-                                                                               self.data_path.load_reg(decoded["tr"]),
-                                                                               digit))
-            self.tick()     # for alu latch
-            self.tick()     # for reg mux latch
-            self.tick()     # for reg latch
+            self.data_path.latch_reg(
+                decoded["tr"], self.data_path.alu.process(opcode, self.data_path.load_reg(decoded["tr"]), digit)
+            )
+            self.tick()  # for alu latch
+            self.tick()  # for reg mux latch
+            self.tick()  # for reg latch
 
         elif opcode == Opcode.MV:
-            self.tick()     # select for right alu input
+            self.tick()  # select for right alu input
             if decoded["imm"] is not None:
                 addr: int = decoded["imm"]
             else:
@@ -260,9 +252,9 @@ class ControlUint:
             else:
                 addr: int = self.data_path.load_reg(decoded["sr"])
             self.data_path.ld(decoded["tr"], addr)
-            self.tick()     # for ld signal
-            self.tick()     # for mux selection
-            self.tick()     # for latch_reg
+            self.tick()  # for ld signal
+            self.tick()  # for mux selection
+            self.tick()  # for latch_reg
 
         elif opcode == Opcode.ST:
             if decoded["imm"] is not None:
@@ -270,8 +262,8 @@ class ControlUint:
             else:
                 addr: int = self.data_path.load_reg(decoded["sr"])
             self.data_path.st(decoded["tr"], addr)
-            self.tick()     # for st signal
-            self.tick()     # for data latch
+            self.tick()  # for st signal
+            self.tick()  # for data latch
 
         self.latch_pc(sel_next=True)
 

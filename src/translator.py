@@ -19,7 +19,7 @@ def pre_translate(input_file: str) -> list[str]:
     return lines
 
 
-def get_meaningful_text(text: str) -> str:   # removes extra spaces and commas from text
+def get_meaningful_text(text: str) -> str:  # removes extra spaces and commas from text
     text.strip()
     return text[1:-1]
 
@@ -27,14 +27,14 @@ def get_meaningful_text(text: str) -> str:   # removes extra spaces and commas f
 def get_instruction(line: str) -> Instruction:
     if line == "hlt":
         return Instruction(Opcode.HLT)
-    instr: str = line[:line.find(" ")].lower()
-    args = line[line.find(" ") + 1:].split(", ")
+    instr: str = line[: line.find(" ")].lower()
+    args = line[line.find(" ") + 1 :].split(", ")
     if instr == "in":
         instr = "ld"
-        args.append(str(0))     # 0 - in port
+        args.append(str(0))  # 0 - in port
     elif instr == "out":
         instr = "st"
-        args = [args[0], str(1)]    # 1 - out port
+        args = [args[0], str(1)]  # 1 - out port
     opcode: Opcode = Opcode(instr)
     return Instruction(opcode, args)
 
@@ -46,7 +46,7 @@ def translate_tokens(data: list[str]) -> (dict[str, int], dict[int, str], dict[i
 
     textcnt = 1
     if ".data:" in data[0]:
-        datacnt: int = 2    # 0, 1 - IO ports
+        datacnt: int = 2  # 0, 1 - IO ports
         while data[textcnt] != "section .text:":
             label, text = data[textcnt].split(": ")
             jmpdict[label] = datacnt

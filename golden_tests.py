@@ -4,8 +4,8 @@ import os
 import tempfile
 
 import pytest
-from src.translator import translate
 from src.machine import simulate
+from src.translator import translate
 
 
 @pytest.mark.golden_test("./golden/*.yml")
