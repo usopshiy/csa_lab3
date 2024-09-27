@@ -165,7 +165,7 @@ label:
 Инструкции заданы высокоуровневой структурой данных. Для записи машинного кода используется json
 
 ## Транслятор
-**Использование:** './src/translator.py <asm_file> <data_out_file> <instr_out_file>'
+**Использование:** ``./src/translator.py <asm_file> <data_out_file> <instr_out_file>``
 
 Транслятор языка работает в 3 этапа:
 * **Препроцессинг** - разбивает файл на значащие линии, убирает пустые строки и лишние пробелы
@@ -174,6 +174,9 @@ label:
 * **Второй проход** - заменяет метки в памяти инструкций на адреса, согласно словарю метка:адрес
 
 ## Модель процессора
+**Запуск:**
+
+``./src/machine.py <machine_code_file> <data_memory_file> <input_buffer_file>``
 
 ### Data Path
 
@@ -203,3 +206,180 @@ label:
 ``flags`` - флаги операции с алу, необходимы для условных переходов
 
 ## Тестирование
+**Запуск тестов**: ``poetry run pytest . -v``
+
+Конфигурация голден тестов находится в директории [golden](golden)
+
+Настройки голден тестов: [test_golden.py](test_golden.py)
+
+### Тестовое покрытие
+* ``cat`` - повторяет поток ввода на поток вывода
+* ``hello_world`` - выводит "Hello, world!\n" в поток вывода
+* ``hello_user`` - выводит в поток вывода приветствие пользователя
+* ``prob1`` - сумма чисел, кратных 3 или 5, но меньших 1000
+
+### Конфигурация CI с помощью GitHub Actions
+Находится в файле [python.yml](.github/workflows/python.yaml):
+```yml
+name: Python CI/CD
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Run tests and collect coverage
+        run: |
+          poetry run coverage run -m pytest .
+          poetry run coverage report -m
+        env:
+          CI: true
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+
+      - name: Check code formatting with Ruff
+        run: echo Ok
+
+      - name: Run Ruff linters
+        run: poetry run ruff check .
+```
+**Пример работы тестового покрытия**:
+```
+poetry run pytest . -v
+
+=============================================================================== test session starts =============================================================================== 
+platform win32 -- Python 3.10.8, pytest-7.4.4, pluggy-1.5.0 -- C:\Users\Пользователь\AppData\Local\pypoetry\Cache\virtualenvs\csa-lab3-j1K-f4Cs-py3.10\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Пользователь\PycharmProjects\csa_lab3
+configfile: pyproject.toml
+plugins: golden-0.2.2
+platform win32 -- Python 3.10.8, pytest-7.4.4, pluggy-1.5.0 -- C:\Users\Пользователь\AppData\Local\pypoetry\Cache\virtualenvs\csa-lab3-j1K-f4Cs-py3.10\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\Пользователь\PycharmProjects\csa_lab3
+configfile: pyproject.toml
+plugins: golden-0.2.2
+collected 4 items
+
+test_golden.py::test_bar[golden/cat.yml] PASSED                                                                                                                              [ 25%] 
+test_golden.py::test_bar[golden/hello_user.yml] PASSED                                                                                                                       [ 50%] 
+test_golden.py::test_bar[golden/hello_world.yml] PASSED                                                                                                                      [ 75%] 
+test_golden.py::test_bar[golden/prob1.yml] PASSED                                                                                                                            [100%] 
+
+================================================================================ 4 passed in 0.38s ================================================================================ 
+```
+
+**Пример запуска и работы (алгоритм cat)**:
+```
+./translator.py ../algorithms/cat.asm ../data.txt ../instr.txt
+Output files:  ../data.txt ../instr.txt
+
+Process finished with exit code 0
+
+./machine.py ./instr.txt ./data.txt ./input.txt
+csa
+DEBUG   machine:simulate      TICK 0
+ REGS: [0: 0 1: 0 2: 0]
+ ld ['x0', '0']
+DEBUG   machine:simulate      TICK 3
+ REGS: [0: 99 1: 0 2: 0]
+ cmp ['x0', '0']
+DEBUG   machine:simulate      TICK 7
+ REGS: [0: 99 1: 0 2: 0]
+ jz ['6']
+DEBUG   machine:simulate      TICK 9
+ REGS: [0: 99 1: 0 2: 0]
+ st ['x0', '1']
+DEBUG   machine:simulate      TICK 11
+ REGS: [0: 99 1: 0 2: 0]
+ ld ['x0', '0']
+DEBUG   machine:simulate      TICK 14
+ REGS: [0: 115 1: 0 2: 0]
+ jmp ['1']
+DEBUG   machine:simulate      TICK 15
+ REGS: [0: 115 1: 0 2: 0]
+ cmp ['x0', '0']
+DEBUG   machine:simulate      TICK 19
+ REGS: [0: 115 1: 0 2: 0]
+ jz ['6']
+DEBUG   machine:simulate      TICK 21
+ REGS: [0: 115 1: 0 2: 0]
+ st ['x0', '1']
+DEBUG   machine:simulate      TICK 23
+ REGS: [0: 115 1: 0 2: 0]
+ ld ['x0', '0']
+DEBUG   machine:simulate      TICK 26
+ REGS: [0: 97 1: 0 2: 0]
+ jmp ['1']
+DEBUG   machine:simulate      TICK 27
+ REGS: [0: 97 1: 0 2: 0]
+ cmp ['x0', '0']
+DEBUG   machine:simulate      TICK 31
+ REGS: [0: 97 1: 0 2: 0]
+ jz ['6']
+DEBUG   machine:simulate      TICK 33
+ REGS: [0: 97 1: 0 2: 0]
+ st ['x0', '1']
+DEBUG   machine:simulate      TICK 35
+ REGS: [0: 97 1: 0 2: 0]
+ ld ['x0', '0']
+DEBUG   machine:simulate      TICK 38
+ REGS: [0: 0 1: 0 2: 0]
+ jmp ['1']
+DEBUG   machine:simulate      TICK 39
+ REGS: [0: 0 1: 0 2: 0]
+ cmp ['x0', '0']
+DEBUG   machine:simulate      TICK 43
+ REGS: [0: 0 1: 0 2: 0]
+ jz ['6']
+DEBUG   machine:simulate      TICK 45
+ REGS: [0: 0 1: 0 2: 0]
+ hlt []
+DEBUG   machine:simulate      TICK 45
+ REGS: [0: 0 1: 0 2: 0]
+ hlt []
+```
+### Статистика
+| ФИО                        | алг         | LoC | code байт | code инстр. | инстр. | такт | вариант                                                                                   | 
+|----------------------------|-------------|-----|-----------|-------------|--------|------|-------------------------------------------------------------------------------------------|
+| Дашкевич Егор Вячеславович | сat         | 10  | -         | 7           | 20     | 45   | asm   \| risc \| harv \| hw \| instr \| struct \| stream \| mem \| cstr \| prob1 \| cache |
+| Дашкевич Егор Вячеславович | hello_world | 15  | -         | 9           | 91     | 241  | asm   \| risc \| harv \| hw \| instr \| struct \| stream \| mem \| cstr \| prob1 \| cache |
+| Дашкевич Егор Вячеславович | hello_user  | 57  | -         | 42          | 243    | 659  | asm   \| risc \| harv \| hw \| instr \| struct \| stream \| mem \| cstr \| prob1 \| cache |
+| Дашкевич Егор Вячеславович | prob1       | 34  | -         | 26          | 136    | 428  | asm   \| risc \| harv \| hw \| instr \| struct \| stream \| mem \| cstr \| prob1 \| cache |
