@@ -18,9 +18,9 @@ def test_bar(golden, caplog):
         target_file2 = os.path.join(tmpdir, "instr.json")
         input_token = [ord(i) for i in golden["stdin"].rstrip("\n")]
 
-
-        with open(source_file, "w", encoding="utf-8") as file:
-            file.write(golden["source_code"])
+        file = open(source_file, "w")
+        file.write(golden["source_code"])
+        file.close()
         translate(source_file, target_file1, target_file2)
         print("=" * 5)
         data_dict = json.load(open(target_file1, encoding="utf-8"))

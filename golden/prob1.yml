@@ -1,0 +1,631 @@
+source_code: |
+  section .text:
+  mv x0, 35
+  mv x1, 0
+  mv x2, 3
+  loop3:
+      sub x0, x2
+      jl preloop5
+      mv x0, 35
+      add x1, x2
+      add x2, 3
+      jmp loop3
+  preloop5:
+      mv x0, 35
+      mv x2, 5
+  loop5:
+      sub x0, x2
+      jl preloop15
+      mv x0, 35
+      add x1, x2
+      add x2, 5
+      jmp loop5
+  preloop15:
+      mv x0, 35
+      mv x2, 15
+  loop15:
+      sub x0, x2
+      jl exit
+      mv x0, 35
+      sub x1, x2
+      add x2, 15
+      jmp loop15
+  exit:
+      out x1
+      hlt
+stdin: |
+
+instr: |
+  {
+      "0": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "1": {
+          "opcode": "mv",
+          "args": [
+              "x1",
+              "0"
+          ]
+      },
+      "2": {
+          "opcode": "mv",
+          "args": [
+              "x2",
+              "3"
+          ]
+      },
+      "3": {
+          "opcode": "sub",
+          "args": [
+              "x0",
+              "x2"
+          ]
+      },
+      "4": {
+          "opcode": "jl",
+          "args": [
+              "9"
+          ]
+      },
+      "5": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "6": {
+          "opcode": "add",
+          "args": [
+              "x1",
+              "x2"
+          ]
+      },
+      "7": {
+          "opcode": "add",
+          "args": [
+              "x2",
+              "3"
+          ]
+      },
+      "8": {
+          "opcode": "jmp",
+          "args": [
+              "3"
+          ]
+      },
+      "9": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "10": {
+          "opcode": "mv",
+          "args": [
+              "x2",
+              "5"
+          ]
+      },
+      "11": {
+          "opcode": "sub",
+          "args": [
+              "x0",
+              "x2"
+          ]
+      },
+      "12": {
+          "opcode": "jl",
+          "args": [
+              "17"
+          ]
+      },
+      "13": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "14": {
+          "opcode": "add",
+          "args": [
+              "x1",
+              "x2"
+          ]
+      },
+      "15": {
+          "opcode": "add",
+          "args": [
+              "x2",
+              "5"
+          ]
+      },
+      "16": {
+          "opcode": "jmp",
+          "args": [
+              "11"
+          ]
+      },
+      "17": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "18": {
+          "opcode": "mv",
+          "args": [
+              "x2",
+              "15"
+          ]
+      },
+      "19": {
+          "opcode": "sub",
+          "args": [
+              "x0",
+              "x2"
+          ]
+      },
+      "20": {
+          "opcode": "jl",
+          "args": [
+              "25"
+          ]
+      },
+      "21": {
+          "opcode": "mv",
+          "args": [
+              "x0",
+              "35"
+          ]
+      },
+      "22": {
+          "opcode": "sub",
+          "args": [
+              "x1",
+              "x2"
+          ]
+      },
+      "23": {
+          "opcode": "add",
+          "args": [
+              "x2",
+              "15"
+          ]
+      },
+      "24": {
+          "opcode": "jmp",
+          "args": [
+              "19"
+          ]
+      },
+      "25": {
+          "opcode": "st",
+          "args": [
+              "x1",
+              "1"
+          ]
+      },
+      "26": {
+          "opcode": "hlt",
+          "args": []
+      }
+  }
+data: |
+  {}
+logs: |
+  DEBUG   machine:simulate      TICK 0
+   REGS: [0: 0 1: 0 2: 0]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 4
+   REGS: [0: 35 1: 0 2: 0]
+   mv ['x1', '0']
+  DEBUG   machine:simulate      TICK 8
+   REGS: [0: 35 1: 0 2: 0]
+   mv ['x2', '3']
+  DEBUG   machine:simulate      TICK 12
+   REGS: [0: 35 1: 0 2: 3]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 16
+   REGS: [0: 32 1: 0 2: 3]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 18
+   REGS: [0: 32 1: 0 2: 3]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 22
+   REGS: [0: 35 1: 0 2: 3]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 26
+   REGS: [0: 35 1: 3 2: 3]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 30
+   REGS: [0: 35 1: 3 2: 6]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 31
+   REGS: [0: 35 1: 3 2: 6]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 35
+   REGS: [0: 29 1: 3 2: 6]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 37
+   REGS: [0: 29 1: 3 2: 6]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 41
+   REGS: [0: 35 1: 3 2: 6]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 45
+   REGS: [0: 35 1: 9 2: 6]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 49
+   REGS: [0: 35 1: 9 2: 9]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 50
+   REGS: [0: 35 1: 9 2: 9]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 54
+   REGS: [0: 26 1: 9 2: 9]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 56
+   REGS: [0: 26 1: 9 2: 9]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 60
+   REGS: [0: 35 1: 9 2: 9]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 64
+   REGS: [0: 35 1: 18 2: 9]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 68
+   REGS: [0: 35 1: 18 2: 12]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 69
+   REGS: [0: 35 1: 18 2: 12]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 73
+   REGS: [0: 23 1: 18 2: 12]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 75
+   REGS: [0: 23 1: 18 2: 12]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 79
+   REGS: [0: 35 1: 18 2: 12]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 83
+   REGS: [0: 35 1: 30 2: 12]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 87
+   REGS: [0: 35 1: 30 2: 15]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 88
+   REGS: [0: 35 1: 30 2: 15]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 92
+   REGS: [0: 20 1: 30 2: 15]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 94
+   REGS: [0: 20 1: 30 2: 15]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 98
+   REGS: [0: 35 1: 30 2: 15]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 102
+   REGS: [0: 35 1: 45 2: 15]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 106
+   REGS: [0: 35 1: 45 2: 18]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 107
+   REGS: [0: 35 1: 45 2: 18]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 111
+   REGS: [0: 17 1: 45 2: 18]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 113
+   REGS: [0: 17 1: 45 2: 18]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 117
+   REGS: [0: 35 1: 45 2: 18]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 121
+   REGS: [0: 35 1: 63 2: 18]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 125
+   REGS: [0: 35 1: 63 2: 21]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 126
+   REGS: [0: 35 1: 63 2: 21]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 130
+   REGS: [0: 14 1: 63 2: 21]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 132
+   REGS: [0: 14 1: 63 2: 21]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 136
+   REGS: [0: 35 1: 63 2: 21]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 140
+   REGS: [0: 35 1: 84 2: 21]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 144
+   REGS: [0: 35 1: 84 2: 24]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 145
+   REGS: [0: 35 1: 84 2: 24]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 149
+   REGS: [0: 11 1: 84 2: 24]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 151
+   REGS: [0: 11 1: 84 2: 24]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 155
+   REGS: [0: 35 1: 84 2: 24]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 159
+   REGS: [0: 35 1: 108 2: 24]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 163
+   REGS: [0: 35 1: 108 2: 27]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 164
+   REGS: [0: 35 1: 108 2: 27]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 168
+   REGS: [0: 8 1: 108 2: 27]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 170
+   REGS: [0: 8 1: 108 2: 27]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 174
+   REGS: [0: 35 1: 108 2: 27]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 178
+   REGS: [0: 35 1: 135 2: 27]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 182
+   REGS: [0: 35 1: 135 2: 30]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 183
+   REGS: [0: 35 1: 135 2: 30]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 187
+   REGS: [0: 5 1: 135 2: 30]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 189
+   REGS: [0: 5 1: 135 2: 30]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 193
+   REGS: [0: 35 1: 135 2: 30]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 197
+   REGS: [0: 35 1: 165 2: 30]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 201
+   REGS: [0: 35 1: 165 2: 33]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 202
+   REGS: [0: 35 1: 165 2: 33]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 206
+   REGS: [0: 2 1: 165 2: 33]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 208
+   REGS: [0: 2 1: 165 2: 33]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 212
+   REGS: [0: 35 1: 165 2: 33]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 216
+   REGS: [0: 35 1: 198 2: 33]
+   add ['x2', '3']
+  DEBUG   machine:simulate      TICK 220
+   REGS: [0: 35 1: 198 2: 36]
+   jmp ['3']
+  DEBUG   machine:simulate      TICK 221
+   REGS: [0: 35 1: 198 2: 36]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 225
+   REGS: [0: -1 1: 198 2: 36]
+   jl ['9']
+  DEBUG   machine:simulate      TICK 227
+   REGS: [0: -1 1: 198 2: 36]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 231
+   REGS: [0: 35 1: 198 2: 36]
+   mv ['x2', '5']
+  DEBUG   machine:simulate      TICK 235
+   REGS: [0: 35 1: 198 2: 5]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 239
+   REGS: [0: 30 1: 198 2: 5]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 241
+   REGS: [0: 30 1: 198 2: 5]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 245
+   REGS: [0: 35 1: 198 2: 5]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 249
+   REGS: [0: 35 1: 203 2: 5]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 253
+   REGS: [0: 35 1: 203 2: 10]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 254
+   REGS: [0: 35 1: 203 2: 10]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 258
+   REGS: [0: 25 1: 203 2: 10]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 260
+   REGS: [0: 25 1: 203 2: 10]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 264
+   REGS: [0: 35 1: 203 2: 10]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 268
+   REGS: [0: 35 1: 213 2: 10]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 272
+   REGS: [0: 35 1: 213 2: 15]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 273
+   REGS: [0: 35 1: 213 2: 15]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 277
+   REGS: [0: 20 1: 213 2: 15]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 279
+   REGS: [0: 20 1: 213 2: 15]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 283
+   REGS: [0: 35 1: 213 2: 15]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 287
+   REGS: [0: 35 1: 228 2: 15]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 291
+   REGS: [0: 35 1: 228 2: 20]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 292
+   REGS: [0: 35 1: 228 2: 20]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 296
+   REGS: [0: 15 1: 228 2: 20]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 298
+   REGS: [0: 15 1: 228 2: 20]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 302
+   REGS: [0: 35 1: 228 2: 20]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 306
+   REGS: [0: 35 1: 248 2: 20]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 310
+   REGS: [0: 35 1: 248 2: 25]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 311
+   REGS: [0: 35 1: 248 2: 25]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 315
+   REGS: [0: 10 1: 248 2: 25]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 317
+   REGS: [0: 10 1: 248 2: 25]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 321
+   REGS: [0: 35 1: 248 2: 25]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 325
+   REGS: [0: 35 1: 273 2: 25]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 329
+   REGS: [0: 35 1: 273 2: 30]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 330
+   REGS: [0: 35 1: 273 2: 30]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 334
+   REGS: [0: 5 1: 273 2: 30]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 336
+   REGS: [0: 5 1: 273 2: 30]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 340
+   REGS: [0: 35 1: 273 2: 30]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 344
+   REGS: [0: 35 1: 303 2: 30]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 348
+   REGS: [0: 35 1: 303 2: 35]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 349
+   REGS: [0: 35 1: 303 2: 35]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 353
+   REGS: [0: 0 1: 303 2: 35]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 355
+   REGS: [0: 0 1: 303 2: 35]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 359
+   REGS: [0: 35 1: 303 2: 35]
+   add ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 363
+   REGS: [0: 35 1: 338 2: 35]
+   add ['x2', '5']
+  DEBUG   machine:simulate      TICK 367
+   REGS: [0: 35 1: 338 2: 40]
+   jmp ['11']
+  DEBUG   machine:simulate      TICK 368
+   REGS: [0: 35 1: 338 2: 40]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 372
+   REGS: [0: -5 1: 338 2: 40]
+   jl ['17']
+  DEBUG   machine:simulate      TICK 374
+   REGS: [0: -5 1: 338 2: 40]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 378
+   REGS: [0: 35 1: 338 2: 40]
+   mv ['x2', '15']
+  DEBUG   machine:simulate      TICK 382
+   REGS: [0: 35 1: 338 2: 15]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 386
+   REGS: [0: 20 1: 338 2: 15]
+   jl ['25']
+  DEBUG   machine:simulate      TICK 388
+   REGS: [0: 20 1: 338 2: 15]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 392
+   REGS: [0: 35 1: 338 2: 15]
+   sub ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 396
+   REGS: [0: 35 1: 323 2: 15]
+   add ['x2', '15']
+  DEBUG   machine:simulate      TICK 400
+   REGS: [0: 35 1: 323 2: 30]
+   jmp ['19']
+  DEBUG   machine:simulate      TICK 401
+   REGS: [0: 35 1: 323 2: 30]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 405
+   REGS: [0: 5 1: 323 2: 30]
+   jl ['25']
+  DEBUG   machine:simulate      TICK 407
+   REGS: [0: 5 1: 323 2: 30]
+   mv ['x0', '35']
+  DEBUG   machine:simulate      TICK 411
+   REGS: [0: 35 1: 323 2: 30]
+   sub ['x1', 'x2']
+  DEBUG   machine:simulate      TICK 415
+   REGS: [0: 35 1: 293 2: 30]
+   add ['x2', '15']
+  DEBUG   machine:simulate      TICK 419
+   REGS: [0: 35 1: 293 2: 45]
+   jmp ['19']
+  DEBUG   machine:simulate      TICK 420
+   REGS: [0: 35 1: 293 2: 45]
+   sub ['x0', 'x2']
+  DEBUG   machine:simulate      TICK 424
+   REGS: [0: -10 1: 293 2: 45]
+   jl ['25']
+  DEBUG   machine:simulate      TICK 426
+   REGS: [0: -10 1: 293 2: 45]
+   st ['x1', '1']
+  DEBUG   machine:simulate      TICK 428
+   REGS: [0: -10 1: 293 2: 45]
+   hlt []
+  DEBUG   machine:simulate      TICK 428
+   REGS: [0: -10 1: 293 2: 45]
+   hlt []

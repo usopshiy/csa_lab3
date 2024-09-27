@@ -47,11 +47,9 @@ def translate_tokens(data: list[str]) -> (dict[str, int], dict[int, str], dict[i
     textcnt = 1
     if ".data:" in data[0]:
         datacnt: int = 2    # 0, 1 - IO ports
-        data_modifier: int = 0
         while data[textcnt] != "section .text:":
-            print(data_modifier)
             label, text = data[textcnt].split(": ")
-            jmpdict[label] = datacnt - data_modifier
+            jmpdict[label] = datacnt
             text = get_meaningful_text(text)
             for i in text:
                 datadict[datacnt] = i
