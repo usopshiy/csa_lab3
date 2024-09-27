@@ -34,7 +34,7 @@ def get_instruction(line: str) -> Instruction:
         args.append(str(0))     # 0 - in port
     elif instr == "out":
         instr = "st"
-        args = [str(1), args[0]]    # 1 - out port
+        args = [args[0], str(1)]    # 1 - out port
     opcode: Opcode = Opcode(instr)
     return Instruction(opcode, args)
 
