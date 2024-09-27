@@ -8,13 +8,13 @@ section .text:
     ld x0, greeting
 loop1:
     cmp x0, 0
-    jz x0, preloop2
+    jz preloop2
     out x0
     ld x0, x1
     inc x1
-    jmp loop
+    jmp loop1
 preloop2:
-    mv x1, word
+    mv x1, hello_end
     add x1, 3
     mv x2, x1
 loop2:
@@ -38,7 +38,7 @@ loop3:
 loop4:
     ld x0, x2
     cmp x0, 0
-    jz x0, preloop5
+    jz preloop5
     out x0
     inc x2
     jmp loop4
@@ -48,7 +48,7 @@ preloop5:
     inc x1
 loop5:
     cmp x0, 0
-    jz x0, exit
+    jz exit
     out x0
     ld x0, x1
     inc x1

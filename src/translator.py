@@ -44,19 +44,19 @@ def translate_tokens(data: list[str]) -> (dict[str, int], dict[int, str], dict[i
     datadict: dict[int, str] = {}
     instrdict: dict[int, Instruction] = {}
 
-    textcnt = 0
+    textcnt = 1
     if ".data:" in data[0]:
-        textcnt += 1
         datacnt: int = 2    # 0, 1 - IO ports
+        data_modifier: int = 0
         while data[textcnt] != "section .text:":
+            print(data_modifier)
             label, text = data[textcnt].split(": ")
+            jmpdict[label] = datacnt - data_modifier
             text = get_meaningful_text(text)
-            jmpdict[label] = datacnt
             for i in text:
                 datadict[datacnt] = i
                 datacnt += 1
             textcnt += 1
-
     instrcnt: int = 0
     for i in data[textcnt:]:
         if ":" in i:
@@ -94,3 +94,4 @@ if __name__ == "__main__":
     assert len(args) == 3, "Usage: translator.py <input> <data_output> <instr_output>"
 
     translate(args[0], args[1], args[2])
+    print("Output files: ", args[1], args[2])
